@@ -1,57 +1,50 @@
 {
-  "updated": "2026-05-18T12:42:00+08:00",
+  "updated": "2026-05-21T15:55:00+08:00",
   "agents": [
     {
       "id": "creamy", "name": "Creamy", "role": "领袖 / 协调者",
-      "avatar": "avatars/creamy.png", "status": "active", "model": "deepseek-v4-pro",
+      "avatar": "creamy.png", "status": "active", "model": "deepseek-v4-pro",
       "tasks": [
-        {"title":"分析阿东多 Agent 方案文章 → 提三项改进","status":"done"},
-        {"title":"三路分派：夜间巡检/BOARD/Cron 审计","status":"done"},
-        {"title":"验收 Velia SCHEMA.md + Lunaria BOARD-DESIGN.md","status":"done"},
-        {"title":"验收 Kael 夜间巡检 + BOARD v1/v2 全部交付","status":"done"},
-        {"title":"更新 TEAM_INDEX 结构 + board-data.json","status":"done"}
+        {"title":"BOARD.html → GitHub Pages 部署 + 密码认证","status":"done"},
+        {"title":"修复头像/Cron/任务展开/死亡任务","status":"in_progress"},
+        {"title":"等待新任务指派","status":"pending"}
       ]
     },
     {
       "id": "kael", "name": "Kael", "role": "重装工匠 / 执行者",
-      "avatar": "avatars/kael.png", "status": "active", "model": "deepseek-v4-pro",
+      "avatar": "kael.png", "status": "active", "model": "deepseek-v4-pro",
       "tasks": [
-        {"title":"夜间巡检 Cron：prompt + 脚本 + plist + INDEX","status":"done"},
-        {"title":"launchd 安装确认 (00:53 每日触发)","status":"done"},
-        {"title":"BOARD.html v1 完整实现","status":"done"},
-        {"title":"BOARD.html v2 任务展开 + 视角切换","status":"done"},
-        {"title":"BOARD-DESIGN.md 已对齐","status":"done"}
+        {"title":"GitHub Pages 部署 + 密码门实现","status":"done"},
+        {"title":"BOARD 修复：头像路径/Cron 同步/任务展开","status":"in_progress"},
+        {"title":"等待新任务指派","status":"pending"}
       ]
     },
     {
       "id": "velia", "name": "Velia", "role": "史官 / 知识官",
-      "avatar": "avatars/velia.png", "status": "standby", "model": "deepseek-v4-pro",
+      "avatar": "velia.png", "status": "standby", "model": "deepseek-v4-pro",
       "tasks": [
-        {"title":"夜间巡检知识分类 Schema v1.0","status":"done"},
-        {"title":"OBNotes 知识库日常维护","status":"pending"}
+        {"title":"OBNotes 知识库日常维护","status":"in_progress"},
+        {"title":"Weekly Clippings Digest (每周日 23:43)","status":"pending"}
       ]
     },
     {
       "id": "lunaria", "name": "Lunaria", "role": "幻术师 / 创意家",
-      "avatar": "avatars/lunaria.png", "status": "standby", "model": "deepseek-v4-pro",
+      "avatar": "lunaria.png", "status": "standby", "model": "deepseek-v4-pro",
       "tasks": [
-        {"title":"BOARD.html 视觉设计规范 v1.0","status":"done"},
-        {"title":"下一轮产品/视觉需求","status":"pending"}
+        {"title":"等待产品/视觉需求","status":"pending"}
       ]
     },
     {
       "id": "orion", "name": "Orion", "role": "占星师 / 研究员",
-      "avatar": "avatars/orion.png", "status": "standby", "model": "deepseek-v4-pro",
+      "avatar": "orion.png", "status": "standby", "model": "deepseek-v4-pro",
       "tasks": [
-        {"title":"AI 新闻早报 Cron (每天 08:11)","status":"done"},
-        {"title":"等待研究/调研任务指派","status":"pending"}
+        {"title":"每日 AI 新闻早报 (08:11)","status":"pending"}
       ]
     },
     {
       "id": "amber", "name": "Amber", "role": "吟游诗人 / 表达者",
-      "avatar": "avatars/amber.png", "status": "standby", "model": "deepseek-v4-pro",
+      "avatar": "amber.png", "status": "standby", "model": "deepseek-v4-pro",
       "tasks": [
-        {"title":"头像已补齐","status":"done"},
         {"title":"等待内容创作任务指派","status":"pending"}
       ]
     }
@@ -59,15 +52,20 @@
   "projects": [
     {
       "id": "cursive-generator", "name": "Cursive Generator", "status": "active",
-      "desc": "cursive-texte-generator，昨日内页功能完成",
+      "desc": "cursive-text-generator，内页功能迭代中",
       "members": ["kael","velia","lunaria"],
       "tasks": {"total": 6, "done": 5}
+    },
+    {
+      "id": "magic-board", "name": "Magic Cat Board", "status": "dev",
+      "desc": "GitHub Pages 看板 v2.1，密码认证 + 双视角",
+      "members": ["creamy","kael"],
+      "tasks": {"total": 4, "done": 2}
     }
   ],
   "crons": [
-    {"name":"睡觉提醒 + Velia 总结","schedule":"每天 23:00","agent":"main"},
-    {"name":"AI 新闻早报","schedule":"每天 08:11","agent":"orion"},
-    {"name":"夜间巡检","schedule":"每天 00:53","agent":"kael"},
+    {"name":"每日 AI 新闻早报","schedule":"每天 08:11","agent":"orion"},
+    {"name":"Weekly Clippings Digest","schedule":"每周日 23:43","agent":"velia"},
     {"name":"OBNotes 月度 Lint","schedule":"每月 1 日 00:23","agent":"velia"}
   ]
 }
