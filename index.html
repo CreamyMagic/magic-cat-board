@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magic Cat Team — Board v2</title>
+<link rel="icon" type="image/png" href="magic-cat-team-logo.png">
 <style>
 /* ═══════════════════════════════════════════
    Magic Cat Team Board v2.1
@@ -58,7 +59,7 @@ body {
 @keyframes dialogIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
 .auth-dialog.shake { animation: shake 400ms ease-in-out; }
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
-.auth-icon { font-size: 40px; margin-bottom: 12px; }
+.auth-icon img { width: 64px; height: 64px; object-fit: contain; }
 .auth-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
 .auth-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
 .auth-input {
@@ -79,7 +80,8 @@ body {
 
 /* ── Header ── */
 .header { display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 24px; border-bottom: 1px solid var(--divider); }
-.header-left { display: flex; align-items: center; gap: 16px; }
+.header-left { display: flex; align-items: center; gap: 10px; }
+.header-logo { border-radius: 6px; }
 .header-title { font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
 .header-time { font-size: 11px; color: var(--text-secondary); font-family: "SF Mono", "Cascadia Code", monospace; }
 .header-right { display: flex; align-items: center; gap: 12px; }
@@ -232,7 +234,7 @@ body {
 <!-- ═══ Password Gate ═══ -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-dialog" id="authDialog">
-    <div class="auth-icon">🔐</div>
+    <div class="auth-icon"><img src="magic-cat-team-logo.png" alt="Magic Cat Team"></div>
     <div class="auth-title">Magic Cat Team</div>
     <div class="auth-subtitle">输入密码查看团队看板</div>
     <input type="password" class="auth-input" id="authInput" placeholder="········" maxlength="32" autocomplete="off">
@@ -244,7 +246,8 @@ body {
 <!-- ═══ Board ═══ -->
 <header class="header">
   <div class="header-left">
-    <span class="header-title">✦ Magic Cat Team</span>
+    <img class="header-logo" src="magic-cat-team-logo.png" alt="Magic Cat Team" width="28" height="28">
+    <span class="header-title">Magic Cat Team</span>
     <div class="view-toggle" id="viewToggle">
       <button class="toggle-btn active" data-view="members">成员视角</button>
       <button class="toggle-btn" data-view="projects">项目视角</button>
