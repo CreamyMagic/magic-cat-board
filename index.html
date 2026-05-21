@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magic Cat Team — Board v2</title>
+<style>
+/* ═══════════════════════════════════════════
+   Magic Cat Team Board v2.1
+   + Password Gate / GitHub Pages Ready
+   Design: Lunaria · Implementation: Kael
+   ═══════════════════════════════════════════ */
+
+:root {
+  --bg: #0f1117;
+  --card-bg: #1a1d27;
+  --card-border: rgba(255,255,255,0.06);
+  --text-primary: #e1e4eb;
+  --text-secondary: #8b8fa3;
+  --divider: rgba(255,255,255,0.08);
+  --overlay: rgba(0,0,0,0.55);
+
+  --accent-creamy: #a78bfa;   --glow-creamy: rgba(167,139,250,0.4);   --bg-creamy: rgba(167,139,250,0.08);
+  --accent-amber:  #f59e0b;   --glow-amber:  rgba(245,158,11,0.4);   --bg-amber:  rgba(245,158,11,0.08);
+  --accent-kael:   #dc2626;   --glow-kael:   rgba(220,38,38,0.4);    --bg-kael:   rgba(220,38,38,0.08);
+  --accent-velia:  #06b6d4;   --glow-velia:  rgba(6,182,212,0.4);    --bg-velia:  rgba(6,182,212,0.08);
+  --accent-lunaria:#f472b6;   --glow-lunaria:rgba(244,114,182,0.4);  --bg-lunaria:rgba(244,114,182,0.08);
+  --accent-orion:  #3b82f6;   --glow-orion:  rgba(59,130,246,0.4);   --bg-orion:  rgba(59,130,246,0.08);
+
+  --status-offline: #4b4f5c;
+  --task-done: #34d399;
+  --task-progress: #fbbf24;
+  --task-pending: #6b7280;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ Password Gate ═══ */
+.auth-overlay {
+  position: fixed; inset: 0; background: var(--overlay);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.auth-dialog {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 40px 36px; width: 360px; max-width: 90vw;
+  text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: dialogIn 300ms ease-out;
+}
+@keyframes dialogIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.auth-dialog.shake { animation: shake 400ms ease-in-out; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
+.auth-icon { font-size: 40px; margin-bottom: 12px; }
+.auth-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.auth-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
+.auth-input {
+  width: 100%; padding: 12px 16px; background: var(--bg);
+  border: 1px solid var(--card-border); border-radius: 10px;
+  color: var(--text-primary); font-size: 14px; outline: none; text-align: center;
+  transition: border-color 200ms; font-family: inherit;
+}
+.auth-input:focus { border-color: var(--accent-creamy); }
+.auth-input.error { border-color: var(--accent-kael); animation: shake 400ms ease-in-out; }
+.auth-error { font-size: 11px; color: var(--accent-kael); margin-top: 8px; min-height: 16px; }
+.auth-btn {
+  width: 100%; margin-top: 16px; padding: 10px; background: var(--accent-creamy);
+  border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background 200ms; font-family: inherit;
+}
+.auth-btn:hover { background: #8b6fe6; }
+
+/* ── Header ── */
+.header { display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 24px; border-bottom: 1px solid var(--divider); }
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-title { font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
+.header-time { font-size: 11px; color: var(--text-secondary); font-family: "SF Mono", "Cascadia Code", monospace; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+
+/* ── View Toggle ── */
+.view-toggle { display: flex; background: var(--card-bg); border-radius: 8px; padding: 2px; border: 1px solid var(--card-border); }
+.toggle-btn { padding: 4px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--text-secondary); transition: all 200ms; font-family: inherit; }
+.toggle-btn.active { background: var(--divider); color: var(--text-primary); }
+.toggle-btn:hover:not(.active) { color: var(--text-primary); }
+
+/* ── Grid ── */
+.board { display: grid; grid-template-columns: repeat(3, minmax(280px, 1fr)); gap: 16px; padding: 24px; max-width: 1100px; margin: 0 auto; }
+.board.projects { grid-template-columns: repeat(2, minmax(320px, 1fr)); max-width: 900px; }
+
+/* ── Card ── */
+.card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px 20px 16px; min-height: 220px; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; transition: transform 200ms ease-out, box-shadow 200ms ease-out; opacity: 0; animation: fadeIn 300ms ease-out forwards; }
+.card:hover { transform: translateY(-2px); }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
+.card::after { content: ''; position: absolute; top: 16px; bottom: 16px; left: 0; width: 3px; border-radius: 0 2px 2px 0; transition: background 300ms; }
+.card:nth-child(1) { animation-delay: 0ms; }  .card:nth-child(2) { animation-delay: 80ms; }
+.card:nth-child(3) { animation-delay: 160ms; } .card:nth-child(4) { animation-delay: 240ms; }
+.card:nth-child(5) { animation-delay: 320ms; } .card:nth-child(6) { animation-delay: 400ms; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Per-agent accents */
+.card[data-agent="creamy"]::before,.card[data-agent="creamy"]::after { background: var(--accent-creamy); }
+.card[data-agent="creamy"]:hover { box-shadow: 0 0 12px var(--glow-creamy); }
+.card[data-agent="amber"]::before,.card[data-agent="amber"]::after { background: var(--accent-amber); }
+.card[data-agent="amber"]:hover { box-shadow: 0 0 12px var(--glow-amber); }
+.card[data-agent="kael"]::before,.card[data-agent="kael"]::after { background: var(--accent-kael); }
+.card[data-agent="kael"]:hover { box-shadow: 0 0 12px var(--glow-kael); }
+.card[data-agent="velia"]::before,.card[data-agent="velia"]::after { background: var(--accent-velia); }
+.card[data-agent="velia"]:hover { box-shadow: 0 0 12px var(--glow-velia); }
+.card[data-agent="lunaria"]::before,.card[data-agent="lunaria"]::after { background: var(--accent-lunaria); }
+.card[data-agent="lunaria"]:hover { box-shadow: 0 0 12px var(--glow-lunaria); }
+.card[data-agent="orion"]::before,.card[data-agent="orion"]::after { background: var(--accent-orion); }
+.card[data-agent="orion"]:hover { box-shadow: 0 0 12px var(--glow-orion); }
+
+/* ── Status dot ── */
+.status-dot { width: 10px; height: 10px; border-radius: 50%; position: absolute; top: 16px; left: 16px; transition: background 300ms; }
+.status-dot.active { animation: pulse 2s ease-in-out infinite; }
+.status-dot.standby { opacity: 0.4; }
+.status-dot.offline { background: var(--status-offline) !important; opacity: 1; }
+.card[data-agent="creamy"] .status-dot { background: var(--accent-creamy); }
+.card[data-agent="amber"]  .status-dot { background: var(--accent-amber); }
+.card[data-agent="kael"]   .status-dot { background: var(--accent-kael); }
+.card[data-agent="velia"]  .status-dot { background: var(--accent-velia); }
+.card[data-agent="lunaria"] .status-dot { background: var(--accent-lunaria); }
+.card[data-agent="orion"]  .status-dot { background: var(--accent-orion); }
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(.8);opacity:.6} }
+
+/* ── Avatar ── */
+.avatar-wrap { width: 56px; height: 56px; border-radius: 50%; margin: 8px auto 10px; position: relative; display: flex; align-items: center; justify-content: center; }
+.avatar-ring { position: absolute; inset: -3px; border-radius: 50%; border: 2px solid transparent; }
+.avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+.avatar-fallback { width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--card-bg); }
+.card[data-agent="creamy"]  .avatar-ring { border-color: var(--accent-creamy); }  .card[data-agent="creamy"]  .avatar-fallback { background: var(--accent-creamy); }
+.card[data-agent="amber"]   .avatar-ring { border-color: var(--accent-amber); }   .card[data-agent="amber"]   .avatar-fallback { background: var(--accent-amber); }
+.card[data-agent="kael"]    .avatar-ring { border-color: var(--accent-kael); }    .card[data-agent="kael"]    .avatar-fallback { background: var(--accent-kael); }
+.card[data-agent="velia"]   .avatar-ring { border-color: var(--accent-velia); }   .card[data-agent="velia"]   .avatar-fallback { background: var(--accent-velia); }
+.card[data-agent="lunaria"] .avatar-ring { border-color: var(--accent-lunaria); } .card[data-agent="lunaria"] .avatar-fallback { background: var(--accent-lunaria); }
+.card[data-agent="orion"]   .avatar-ring { border-color: var(--accent-orion); }   .card[data-agent="orion"]   .avatar-fallback { background: var(--accent-orion); }
+
+/* ── Info ── */
+.agent-name { font-size: 16px; font-weight: 600; margin-bottom: 1px; }
+.agent-role { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+.card-divider { width: 100%; height: 1px; margin-bottom: 12px; opacity: 0.2; }
+.card[data-agent="creamy"]  .card-divider { background: var(--accent-creamy); }
+.card[data-agent="amber"]   .card-divider { background: var(--accent-amber); }
+.card[data-agent="kael"]    .card-divider { background: var(--accent-kael); }
+.card[data-agent="velia"]   .card-divider { background: var(--accent-velia); }
+.card[data-agent="lunaria"] .card-divider { background: var(--accent-lunaria); }
+.card[data-agent="orion"]   .card-divider { background: var(--accent-orion); }
+
+.meta { width: 100%; font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; text-align: left; }
+.meta-label { color: var(--text-secondary); opacity: 0.7; }
+.meta-value { color: var(--text-primary); font-family: "SF Mono","Cascadia Code",monospace; font-size: 10px; }
+
+/* ── Progress bar ── */
+.progress-wrap { width: 100%; margin-top: auto; }
+.progress-bar { width: 100%; height: 4px; border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 2px; transition: width 400ms ease-out; }
+.progress-label { font-size: 10px; color: var(--text-secondary); margin-top: 4px; text-align: right; cursor: pointer; user-select: none; }
+.progress-label:hover { color: var(--text-primary); }
+.progress-label::after { content: ' ▸'; font-size: 9px; transition: transform 200ms; display: inline-block; }
+.progress-label.open::after { transform: rotate(90deg); }
+.card[data-agent="creamy"]  .progress-bar { background: var(--bg-creamy); }  .card[data-agent="creamy"]  .progress-fill { background: var(--accent-creamy); }
+.card[data-agent="amber"]   .progress-bar { background: var(--bg-amber); }   .card[data-agent="amber"]   .progress-fill { background: var(--accent-amber); }
+.card[data-agent="kael"]    .progress-bar { background: var(--bg-kael); }    .card[data-agent="kael"]    .progress-fill { background: var(--accent-kael); }
+.card[data-agent="velia"]   .progress-bar { background: var(--bg-velia); }   .card[data-agent="velia"]   .progress-fill { background: var(--accent-velia); }
+.card[data-agent="lunaria"] .progress-bar { background: var(--bg-lunaria); } .card[data-agent="lunaria"] .progress-fill { background: var(--accent-lunaria); }
+.card[data-agent="orion"]   .progress-bar { background: var(--bg-orion); }   .card[data-agent="orion"]   .progress-fill { background: var(--accent-orion); }
+
+/* ── Task list (collapsible) ── */
+.task-list { width: 100%; max-height: 0; overflow: hidden; transition: max-height 300ms ease-out, margin 200ms; margin-top: 0; }
+.task-list.open { max-height: 300px; margin-top: 8px; }
+.task-item { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 11px; color: var(--text-secondary); }
+.task-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.task-dot.done { background: var(--task-done); }
+.task-dot.in_progress { background: var(--task-progress); animation: pulse 2s ease-in-out infinite; }
+.task-dot.pending { background: var(--task-pending); border: 1.5px solid var(--task-pending); background: transparent; }
+.task-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.task-title.done { text-decoration: line-through; opacity: 0.6; }
+
+/* ── Project card ── */
+.project-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: transform 200ms ease-out; opacity: 0; animation: fadeIn 300ms ease-out forwards; }
+.project-card:hover { transform: translateY(-2px); }
+.project-card:nth-child(1) { animation-delay: 0ms; } .project-card:nth-child(2) { animation-delay: 100ms; }
+.project-card:nth-child(3) { animation-delay: 200ms; } .project-card:nth-child(4) { animation-delay: 300ms; }
+.project-header { display: flex; align-items: center; justify-content: space-between; }
+.project-name { font-size: 15px; font-weight: 600; }
+.project-status { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+.project-status.dev { background: rgba(6,182,212,0.12); color: var(--accent-velia); }
+.project-status.design { background: rgba(244,114,182,0.12); color: var(--accent-lunaria); }
+.project-status.audit { background: rgba(167,139,250,0.12); color: var(--accent-creamy); }
+.project-status.active { background: rgba(52,211,153,0.12); color: var(--task-done); }
+.project-desc { font-size: 11px; color: var(--text-secondary); }
+.project-members { display: flex; gap: 6px; flex-wrap: wrap; }
+.member-chip { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-secondary); background: var(--divider); border-radius: 12px; padding: 2px 8px 2px 4px; }
+.member-chip-avatar { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; display: block; }
+.member-chip-initial { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--card-bg); }
+.project-progress { display: flex; align-items: center; gap: 10px; }
+.project-progress .progress-bar { flex: 1; background: var(--divider); }
+.project-progress .progress-fill { background: var(--text-secondary); }
+.project-progress .progress-label { font-size: 10px; color: var(--text-secondary); margin-top: 0; cursor: default; }
+.project-progress .progress-label::after { display: none; }
+
+/* Cron section */
+.cron-section { margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--divider); }
+.cron-section-title { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.cron-item { display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-secondary); padding: 2px 0; }
+.cron-schedule { font-family: "SF Mono","Cascadia Code",monospace; font-size: 9px; }
+.cron-agent { font-size: 9px; color: var(--accent-creamy); }
+
+/* ── Footer ── */
+.footer { display: flex; align-items: center; justify-content: center; height: 32px; padding: 0 24px; border-top: 1px solid var(--divider); font-size: 11px; color: var(--text-secondary); }
+.footer-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 3px; }
+.footer-dot.dot-active { background: var(--task-done); }
+.footer-dot.dot-standby { background: var(--text-secondary); }
+.footer-dot.dot-offline { background: var(--status-offline); }
+
+@media (prefers-reduced-motion: reduce) { .status-dot.active,.task-dot.in_progress,.card,.project-card { animation: none; } .card,.project-card { opacity: 1; } .card:hover,.project-card:hover { transform: none; } .progress-fill,.task-list { transition: none; } }
+@media (max-width:1023px) and (min-width:600px) { .board { grid-template-columns: repeat(2,1fr); } .board.projects { grid-template-columns: 1fr; max-width: 500px; } }
+@media (max-width:599px) { .board,.board.projects { grid-template-columns: 1fr; padding: 16px; gap: 12px; } .header { padding: 0 16px; } .header-title { font-size: 14px; } .header-left { gap: 8px; } .toggle-btn { padding: 4px 10px; font-size: 11px; } }
+</style>
+</head>
+<body>
+
+<!-- ═══ Password Gate ═══ -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-dialog" id="authDialog">
+    <div class="auth-icon">🔐</div>
+    <div class="auth-title">Magic Cat Team</div>
+    <div class="auth-subtitle">输入密码查看团队看板</div>
+    <input type="password" class="auth-input" id="authInput" placeholder="········" maxlength="32" autocomplete="off">
+    <div class="auth-error" id="authError"></div>
+    <button class="auth-btn" id="authBtn">进入</button>
+  </div>
+</div>
+
+<!-- ═══ Board ═══ -->
+<header class="header">
+  <div class="header-left">
+    <span class="header-title">✦ Magic Cat Team</span>
+    <div class="view-toggle" id="viewToggle">
+      <button class="toggle-btn active" data-view="members">成员视角</button>
+      <button class="toggle-btn" data-view="projects">项目视角</button>
+    </div>
+  </div>
+  <span class="header-time" id="clock">Updated: --:--:--</span>
+</header>
+
+<main class="board" id="board"></main>
+<footer class="footer" id="footer"></footer>
+
+<script>
+// ═══════════════════════════════════════════
+// AUTH GATE
+// ═══════════════════════════════════════════
+(function() {
+  // Hash of the correct password (computed at build time)
+  const PASS_HASH = '6421abbc0af2ee0b9adc04f35f95ec49ca49f229bcad733c1763d3089c79af35';
+  const STORAGE_KEY = '_mct_auth';
+
+  async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function hideGate() {
+    const el = document.getElementById('authOverlay');
+    el.style.transition = 'opacity 300ms';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 400);
+  }
+
+  function showError(msg) {
+    const err = document.getElementById('authError');
+    const dialog = document.getElementById('authDialog');
+    const input = document.getElementById('authInput');
+    err.textContent = msg;
+    dialog.classList.remove('shake');
+    void dialog.offsetWidth; // force reflow
+    dialog.classList.add('shake');
+    input.classList.add('error');
+    input.value = '';
+    input.focus();
+  }
+
+  async function tryLogin() {
+    const input = document.getElementById('authInput');
+    const pwd = input.value.trim();
+    if (!pwd) return showError('请输入密码');
+
+    const hash = await sha256(pwd);
+    if (hash === PASS_HASH) {
+      sessionStorage.setItem(STORAGE_KEY, '1');
+      hideGate();
+    } else {
+      showError('密码错误，再试一次');
+    }
+  }
+
+  // Check if already authenticated this session
+  if (sessionStorage.getItem(STORAGE_KEY) === '1') {
+    hideGate();
+  } else {
+    const input = document.getElementById('authInput');
+    const btn = document.getElementById('authBtn');
+
+    btn.addEventListener('click', tryLogin);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+    input.focus();
+  }
+})();
+
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const BOARD_DATA = {
+  updated: null,
+  agents: [
+    { id:"creamy", name:"Creamy", role:"领袖 / 协调者", avatar:"creamy.png", status:"active", model:"deepseek-v4-pro",
+      tasks:[
+        {title:"分析阿东多 Agent 方案文章 → 提三项改进",status:"done"},
+        {title:"三路分派：夜间巡检/BOARD/Cron 审计",status:"done"},
+        {title:"验收 Velia SCHEMA.md + Lunaria BOARD-DESIGN.md",status:"done"},
+        {title:"验收 Kael 夜间巡检 + BOARD v1/v2 全部交付",status:"done"},
+        {title:"更新 TEAM_INDEX 结构 + board-data.json",status:"done"}
+      ]},
+    { id:"kael", name:"Kael", role:"重装工匠 / 执行者", avatar:"kael.png", status:"active", model:"deepseek-v4-pro",
+      tasks:[
+        {title:"夜间巡检 Cron：prompt + 脚本 + plist + INDEX",status:"done"},
+        {title:"launchd 安装确认 (00:53 每日触发)",status:"done"},
+        {title:"BOARD.html v1 完整实现",status:"done"},
+        {title:"BOARD.html v2 任务展开 + 视角切换",status:"done"},
+        {title:"BOARD-DESIGN.md 已对齐",status:"done"}
+      ]},
+    { id:"velia", name:"Velia", role:"史官 / 知识官", avatar:"velia.png", status:"standby", model:"deepseek-v4-pro",
+      tasks:[
+        {title:"夜间巡检知识分类 Schema v1.0",status:"done"},
+        {title:"OBNotes 知识库日常维护",status:"pending"}
+      ]},
+    { id:"lunaria", name:"Lunaria", role:"幻术师 / 创意家", avatar:"lunaria.png", status:"standby", model:"deepseek-v4-pro",
+      tasks:[
+        {title:"BOARD.html 视觉设计规范 v1.0",status:"done"},
+        {title:"下一轮产品/视觉需求",status:"pending"}
+      ]},
+    { id:"orion", name:"Orion", role:"占星师 / 研究员", avatar:"orion.png", status:"standby", model:"deepseek-v4-pro",
+      tasks:[
+        {title:"AI 新闻早报 Cron (每天 08:11)",status:"done"},
+        {title:"等待研究/调研任务指派",status:"pending"}
+      ]},
+    { id:"amber", name:"Amber", role:"吟游诗人 / 表达者", avatar:"amber.png", status:"standby", model:"deepseek-v4-pro",
+      tasks:[
+        {title:"头像已补齐",status:"done"},
+        {title:"等待内容创作任务指派",status:"pending"}
+      ]}
+  ],
+  projects: [
+    { id:"cursive-generator",name:"Cursive Generator",status:"active",desc:"cursive-texte-generator，昨日内页功能完成",members:["kael","velia","lunaria"],tasks:{total:6,done:5}},
+    { id:"magic-board",name:"Magic Cat Board",status:"dev",desc:"团队看板 GitHub Pages 部署，含密码认证",members:["creamy","kael"],tasks:{total:3,done:2}}
+  ],
+  crons: [
+    { name:"睡觉提醒 + Velia 总结",schedule:"每天 23:00",agent:"main"},
+    { name:"AI 新闻早报",schedule:"每天 08:11",agent:"orion"},
+    { name:"夜间巡检",schedule:"每天 00:53",agent:"kael"},
+    { name:"OBNotes 月度 Lint",schedule:"每月 1 日 00:23",agent:"velia"}
+  ]
+};
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+(function() {
+  const board = document.getElementById('board');
+  const footer = document.getElementById('footer');
+  const clock = document.getElementById('clock');
+  const toggle = document.getElementById('viewToggle');
+  let currentView = 'members';
+
+  function accentFor(id) { return getComputedStyle(document.documentElement).getPropertyValue('--accent-'+id).trim(); }
+  function bgFor(id) { return getComputedStyle(document.documentElement).getPropertyValue('--bg-'+id).trim(); }
+  function statusClass(s) { return s==='active'?'active':s==='standby'?'standby':'offline'; }
+  function initial(n) { return (n||'?').charAt(0).toUpperCase(); }
+  function taskStats(tasks) { const total=tasks.length, done=tasks.filter(t=>t.status==='done').length, inprog=tasks.filter(t=>t.status==='in_progress').length; return{total,done,inprog}; }
+
+  function renderMemberCard(a) {
+    const stats = taskStats(a.tasks||[]);
+    const pct = stats.total>0 ? Math.round((stats.done/stats.total)*100) : 0;
+    const init = initial(a.name);
+    const taskItems = (a.tasks||[]).map(t=>`
+      <div class="task-item">
+        <span class="task-dot ${t.status}"></span>
+        <span class="task-title ${t.status==='done'?'done':''}">${t.title}</span>
+      </div>`).join('');
+    return `
+      <div class="card" data-agent="${a.id}">
+        <div class="status-dot ${statusClass(a.status)}" title="${a.status}"></div>
+        <div class="avatar-wrap">
+          <div class="avatar-ring"></div>
+          <img class="avatar-img" src="${a.avatar}" alt="${a.name}" loading="lazy"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="avatar-fallback" style="display:${a.avatar?'none':'flex'}">${init}</div>
+        </div>
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-role">${a.role}</div>
+        <div class="card-divider"></div>
+        <div class="meta"><span class="meta-label">Model</span> <span class="meta-value">${a.model}</span></div>
+        ${stats.inprog>0 ? `<div class="meta" style="margin-bottom:6px"><span class="meta-label">进行中</span> <span style="color:var(--task-progress)">${(a.tasks||[]).filter(t=>t.status==='in_progress').map(t=>t.title).join(', ')}</span></div>` : ''}
+        <div class="progress-wrap">
+          ${stats.total>0 ? `
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div class="progress-label" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+              ${stats.done}/${stats.total}
+            </div>
+            <div class="task-list">${taskItems}</div>
+          ` : `<div class="progress-label" style="text-align:center;opacity:0.5;cursor:default">—</div>`}
+        </div>
+      </div>`;
+  }
+
+  const agentMeta = {};
+  BOARD_DATA.agents.forEach(a=>{ agentMeta[a.id] = a; });
+
+  function renderMemberChip(agentId) {
+    const a = agentMeta[agentId];
+    if (!a) return `<span class="member-chip"><span class="member-chip-initial" style="background:var(--text-secondary)">?</span> ${agentId}</span>`;
+    const init = initial(a.name);
+    const accent = accentFor(agentId);
+    return `<span class="member-chip" title="${a.name} · ${a.role}">
+      ${a.avatar ? `<img class="member-chip-avatar" src="${a.avatar}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+      <span class="member-chip-initial" style="background:${accent};${a.avatar?'display:none':''}">${init}</span>
+      ${a.name}
+    </span>`;
+  }
+
+  function statusBadgeClass(s) { return {dev:'dev',active:'dev',design:'design',audit:'audit'}[s]||'active'; }
+  function statusLabel(s) { return {dev:'开发中',design:'设计中',audit:'审计中',active:'运行中'}[s]||s; }
+
+  function renderProjectCard(p) {
+    const pct = p.tasks.total>0 ? Math.round((p.tasks.done/p.tasks.total)*100) : 0;
+    return `<div class="project-card">
+      <div class="project-header">
+        <span class="project-name">${p.name}</span>
+        <span class="project-status ${statusBadgeClass(p.status)}">${statusLabel(p.status)}</span>
+      </div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-members">${(p.members||[]).map(renderMemberChip).join('')}</div>
+      <div class="project-progress">
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <span class="progress-label">${p.tasks.done}/${p.tasks.total}</span>
+      </div>
+    </div>`;
+  }
+
+  function renderCronSection() {
+    const items = (BOARD_DATA.crons||[]).map(c=>`
+      <div class="cron-item">
+        <span>${c.name}</span>
+        <span class="cron-schedule">${c.schedule}</span>
+        <span class="cron-agent">@${c.agent}</span>
+      </div>`).join('');
+    return `<div class="project-card">
+      <div class="project-header">
+        <span class="project-name">⚡ Cron 作业</span>
+        <span class="project-status active">${BOARD_DATA.crons.length} 个运行中</span>
+      </div>
+      <div class="cron-section">${items}</div>
+    </div>`;
+  }
+
+  function renderBoard(view) {
+    currentView = view;
+    if (view === 'projects') {
+      board.className = 'board projects';
+      board.innerHTML = BOARD_DATA.projects.map(renderProjectCard).join('') + renderCronSection();
+    } else {
+      board.className = 'board';
+      board.innerHTML = BOARD_DATA.agents.map(renderMemberCard).join('');
+    }
+    renderFooter(view);
+  }
+
+  function renderFooter(view) {
+    if (view === 'projects') {
+      const p = BOARD_DATA.projects;
+      footer.innerHTML = `Projects: ${p.length} · Tasks: ${p.reduce((s,x)=>s+x.tasks.done,0)}/${p.reduce((s,x)=>s+x.tasks.total,0)} · Crons: ${(BOARD_DATA.crons||[]).length}`;
+    } else {
+      const a = BOARD_DATA.agents;
+      const active = a.filter(x=>x.status==='active').length, standby = a.filter(x=>x.status==='standby').length, offline = a.filter(x=>x.status==='offline').length;
+      const stats = a.map(x=>taskStats(x.tasks||[]));
+      footer.innerHTML = `<span class="footer-dot dot-active"></span> Active: ${active} · <span class="footer-dot dot-standby"></span> Standby: ${standby} · <span class="footer-dot dot-offline"></span> Offline: ${offline} · Tasks: ${stats.reduce((s,st)=>s+st.done,0)}/${stats.reduce((s,st)=>s+st.total,0)}`;
+    }
+  }
+
+  toggle.addEventListener('click', function(e) {
+    const btn = e.target.closest('.toggle-btn');
+    if (!btn) return;
+    const view = btn.dataset.view;
+    toggle.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderBoard(view);
+  });
+
+  function tick() {
+    const now = new Date();
+    clock.textContent = 'Updated: ' + [now.getHours(),now.getMinutes(),now.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
+  }
+
+  async function loadData() {
+    try {
+      const resp = await fetch('board-data.json');
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json.agents) BOARD_DATA.agents = json.agents;
+        if (json.projects) BOARD_DATA.projects = json.projects;
+        if (json.crons) BOARD_DATA.crons = json.crons;
+        agentMeta.length = 0;
+        BOARD_DATA.agents.forEach(a=>{ agentMeta[a.id] = a; });
+      }
+    } catch(_) {}
+  }
+
+  (async function init() {
+    await loadData();
+    renderBoard('members');
+    tick();
+    setInterval(tick, 1000);
+  })();
+})();
+</script>
+</body>
+</html>
