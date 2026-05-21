@@ -215,7 +215,8 @@ body {
 .cron-agent { font-size: 9px; color: var(--accent-creamy); }
 
 /* ── Footer ── */
-.footer { display: flex; align-items: center; justify-content: center; height: 32px; padding: 0 24px; border-top: 1px solid var(--divider); font-size: 11px; color: var(--text-secondary); }
+.footer { display: flex; align-items: center; justify-content: space-between; height: 32px; padding: 0 24px; border-top: 1px solid var(--divider); font-size: 11px; color: var(--text-secondary); }
+.footer-time { font-family: "SF Mono","Cascadia Code",monospace; color: var(--text-secondary); opacity: 0.7; }
 .footer-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 3px; }
 .footer-dot.dot-active { background: var(--task-done); }
 .footer-dot.dot-standby { background: var(--text-secondary); }
@@ -223,7 +224,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) { .status-dot.active,.task-dot.in_progress,.card,.project-card { animation: none; } .card,.project-card { opacity: 1; } .card:hover,.project-card:hover { transform: none; } .progress-fill,.task-list { transition: none; } }
 @media (max-width:1023px) and (min-width:600px) { .board { grid-template-columns: repeat(2,1fr); } .board.projects { grid-template-columns: 1fr; max-width: 500px; } }
-@media (max-width:599px) { .board,.board.projects { grid-template-columns: 1fr; padding: 16px; gap: 12px; } .header { padding: 0 16px; } .header-title { font-size: 14px; } .header-left { gap: 8px; } .toggle-btn { padding: 4px 10px; font-size: 11px; } }
+@media (max-width:599px) { .board,.board.projects { grid-template-columns: 1fr; padding: 16px; gap: 12px; } .header { padding: 0 16px; justify-content: center; } .header-left { gap: 0; flex-wrap: wrap; justify-content: center; } .header-title { font-size: 14px; width: 100%; text-align: center; margin-bottom: 6px; } .view-toggle { margin: 0 auto; } .toggle-btn { padding: 4px 10px; font-size: 11px; } .footer { flex-direction: column; height: auto; padding: 8px 16px; gap: 4px; } }
 </style>
 </head>
 <body>
@@ -249,11 +250,10 @@ body {
       <button class="toggle-btn" data-view="projects">项目视角</button>
     </div>
   </div>
-  <span class="header-time" id="clock">Updated: --:--:--</span>
 </header>
 
 <main class="board" id="board"></main>
-<footer class="footer" id="footer"></footer>
+<footer class="footer" id="footer"><span id="clock"></span></footer>
 
 <script>
 // ═══════════════════════════════════════════
@@ -372,7 +372,6 @@ const BOARD_DATA = {
 (function() {
   const board = document.getElementById('board');
   const footer = document.getElementById('footer');
-  const clock = document.getElementById('clock');
   const toggle = document.getElementById('viewToggle');
   let currentView = 'members';
 
@@ -480,14 +479,17 @@ const BOARD_DATA = {
   }
 
   function renderFooter(view) {
+    const now = new Date();
+    const timeStr = [now.getHours(),now.getMinutes(),now.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
+    const timeHtml = `<span class="footer-time">${timeStr}</span>`;
     if (view === 'projects') {
       const p = BOARD_DATA.projects;
-      footer.innerHTML = `Projects: ${p.length} · Tasks: ${p.reduce((s,x)=>s+x.tasks.done,0)}/${p.reduce((s,x)=>s+x.tasks.total,0)} · Crons: ${(BOARD_DATA.crons||[]).length}`;
+      footer.innerHTML = `<span>Projects: ${p.length} · Tasks: ${p.reduce((s,x)=>s+x.tasks.done,0)}/${p.reduce((s,x)=>s+x.tasks.total,0)} · Crons: ${(BOARD_DATA.crons||[]).length}</span>${timeHtml}`;
     } else {
       const a = BOARD_DATA.agents;
       const active = a.filter(x=>x.status==='active').length, standby = a.filter(x=>x.status==='standby').length, offline = a.filter(x=>x.status==='offline').length;
       const stats = a.map(x=>taskStats(x.tasks||[]));
-      footer.innerHTML = `<span class="footer-dot dot-active"></span> Active: ${active} · <span class="footer-dot dot-standby"></span> Standby: ${standby} · <span class="footer-dot dot-offline"></span> Offline: ${offline} · Tasks: ${stats.reduce((s,st)=>s+st.done,0)}/${stats.reduce((s,st)=>s+st.total,0)}`;
+      footer.innerHTML = `<span><span class="footer-dot dot-active"></span> Active: ${active} · <span class="footer-dot dot-standby"></span> Standby: ${standby} · <span class="footer-dot dot-offline"></span> Offline: ${offline} · Tasks: ${stats.reduce((s,st)=>s+st.done,0)}/${stats.reduce((s,st)=>s+st.total,0)}</span>${timeHtml}`;
     }
   }
 
@@ -501,8 +503,7 @@ const BOARD_DATA = {
   });
 
   function tick() {
-    const now = new Date();
-    clock.textContent = 'Updated: ' + [now.getHours(),now.getMinutes(),now.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
+    renderFooter(currentView);
   }
 
   async function loadData() {
