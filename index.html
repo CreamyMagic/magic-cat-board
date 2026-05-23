@@ -326,46 +326,156 @@ body {
 // DATA
 // ═══════════════════════════════════════════
 const BOARD_DATA = {
-  updated: null,
-  agents: [
-    { id:"creamy", name:"Creamy", role:"领袖 / 协调者", avatar:"creamy.png", status:"active", model:"DeepSeek V4 Pro",
-      tasks:[
-        {title:"BOARD.html → GitHub Pages 部署 + 密码认证",status:"done"},
-        {title:"修复头像/Cron/任务展开/死亡任务",status:"in_progress"},
-        {title:"等待新任务指派",status:"pending"}
-      ]},
-    { id:"kael", name:"Kael", role:"重装工匠 / 执行者", avatar:"kael.png", status:"active", model:"Gemini 3.5 Flash",
-      tasks:[
-        {title:"GitHub Pages 部署 + 密码门实现",status:"done"},
-        {title:"BOARD 修复：头像路径/Cron 同步/任务展开",status:"in_progress"},
-        {title:"等待新任务指派",status:"pending"}
-      ]},
-    { id:"velia", name:"Velia", role:"史官 / 知识官", avatar:"velia.png", status:"standby", model:"Gemini 3.5 Flash",
-      tasks:[
-        {title:"OBNotes 知识库日常维护",status:"in_progress"},
-        {title:"Weekly Clippings Digest (每周日 23:43)",status:"pending"}
-      ]},
-    { id:"lunaria", name:"Lunaria", role:"幻术师 / 创意家", avatar:"lunaria.png", status:"standby", model:"Gemini 3.5 Flash",
-      tasks:[
-        {title:"等待产品/视觉需求",status:"pending"}
-      ]},
-    { id:"orion", name:"Orion", role:"占星师 / 研究员", avatar:"orion.png", status:"standby", model:"DeepSeek V4 Pro",
-      tasks:[
-        {title:"每日 AI 新闻早报 (08:11)",status:"pending"}
-      ]},
-    { id:"amber", name:"Amber", role:"吟游诗人 / 表达者", avatar:"amber.png", status:"standby", model:"Gemini 3.5 Flash",
-      tasks:[
-        {title:"等待内容创作任务指派",status:"pending"}
-      ]}
+  "updated": "2026-05-23T21:55:00+08:00",
+  "agents": [
+    {
+      "id": "creamy",
+      "name": "Creamy",
+      "role": "领袖 / 协调者",
+      "avatar": "creamy.png",
+      "status": "active",
+      "model": "gpt-5.5 (Custom Provider)",
+      "tasks": [
+        {
+          "title": "BOARD.html → GitHub Pages 部署 + 密码认证",
+          "status": "done"
+        },
+        {
+          "title": "修复头像/Cron/任务展开/死亡任务",
+          "status": "done"
+        },
+        {
+          "title": "修复移动端布局 + 模型配置",
+          "status": "done"
+        },
+        {
+          "title": "等待新任务指派",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "kael",
+      "name": "Kael",
+      "role": "重装工匠 / 执行者",
+      "avatar": "kael.png",
+      "status": "standby",
+      "model": "Gemini 3.5 Flash",
+      "tasks": [
+        {
+          "title": "等待新任务指派",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "velia",
+      "name": "Velia",
+      "role": "史官 / 知识官",
+      "avatar": "velia.png",
+      "status": "standby",
+      "model": "DeepSeek V4 Flash",
+      "tasks": [
+        {
+          "title": "OBNotes 知识库日常维护",
+          "status": "in_progress"
+        },
+        {
+          "title": "Weekly Clippings Digest (每周日 23:43)",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "lunaria",
+      "name": "Lunaria",
+      "role": "幻术师 / 创意家",
+      "avatar": "lunaria.png",
+      "status": "standby",
+      "model": "Gemini 3.5 Flash",
+      "tasks": [
+        {
+          "title": "等待产品/视觉需求",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "orion",
+      "name": "Orion",
+      "role": "占星师 / 研究员",
+      "avatar": "orion.png",
+      "status": "standby",
+      "model": "gpt-5.5 (Custom Provider)",
+      "tasks": [
+        {
+          "title": "每日 AI 新闻早报 (08:11)",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "amber",
+      "name": "Amber",
+      "role": "吟游诗人 / 表达者",
+      "avatar": "amber.png",
+      "status": "standby",
+      "model": "Gemini 3.5 Flash",
+      "tasks": [
+        {
+          "title": "等待内容创作任务指派",
+          "status": "pending"
+        }
+      ]
+    }
   ],
-  projects: [
-    { id:"cursive-generator",name:"Cursive Generator",status:"active",desc:"cursive-text-generator，内页功能迭代中",members:["kael","velia","lunaria"],tasks:{total:6,done:5}},
-    { id:"magic-board",name:"Magic Cat Board",status:"dev",desc:"GitHub Pages 看板 v2.1，密码认证 + 双视角",members:["creamy","kael"],tasks:{total:4,done:2}}
+  "projects": [
+    {
+      "id": "cursive-generator",
+      "name": "Cursive Generator",
+      "status": "active",
+      "desc": "cursive-text-generator，内页功能迭代中",
+      "members": [
+        "kael",
+        "velia",
+        "lunaria"
+      ],
+      "tasks": {
+        "total": 6,
+        "done": 5
+      }
+    },
+    {
+      "id": "magic-board",
+      "name": "Magic Cat Board",
+      "status": "dev",
+      "desc": "GitHub Pages 看板 v2.1，密码认证 + 双视角",
+      "members": [
+        "creamy",
+        "kael"
+      ],
+      "tasks": {
+        "total": 5,
+        "done": 4
+      }
+    }
   ],
-  crons: [
-    { name:"每日 AI 新闻早报",schedule:"每天 08:11",agent:"orion"},
-    { name:"Weekly Clippings Digest",schedule:"每周日 23:43",agent:"velia"},
-    { name:"OBNotes 月度 Lint",schedule:"每月 1 日 00:23",agent:"velia"}
+  "crons": [
+    {
+      "name": "每日 AI 新闻早报",
+      "schedule": "每天 08:11",
+      "agent": "orion"
+    },
+    {
+      "name": "Weekly Clippings Digest",
+      "schedule": "每周日 23:43",
+      "agent": "velia"
+    },
+    {
+      "name": "OBNotes 月度 Lint",
+      "schedule": "每月 1 日 00:23",
+      "agent": "velia"
+    }
   ]
 };
 
