@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-24T15:17:00+08:00",
+  "updated": "2026-05-24T15:37:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -38,6 +38,10 @@
         {
           "title": "GA4/GSC OAuth 技术接入方案",
           "status": "done"
+        },
+        {
+          "title": "GA4/GSC Spike 凭证指南与验证脚本",
+          "status": "in_progress"
         }
       ]
     },
@@ -139,8 +143,8 @@
     {
       "id": "ga4-gsc-growth",
       "name": "GA4 + GSC Growth Analyst",
-      "status": "planning",
-      "desc": "自用增长分析项目：策略框架与 OAuth 技术方案已完成，待 Philex 确认进入 Spike",
+      "status": "spike",
+      "desc": "Philex 已批准进入 Spike：准备 GCP OAuth 指南与本地连通验证脚本",
       "members": [
         "creamy",
         "kael",
@@ -148,7 +152,7 @@
         "velia"
       ],
       "tasks": {
-        "total": 4,
+        "total": 5,
         "done": 3
       }
     }
