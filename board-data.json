@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-24T15:43:00+08:00",
+  "updated": "2026-05-24T16:35:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -144,7 +144,7 @@
       "id": "ga4-gsc-growth",
       "name": "GA4 + GSC Growth Analyst",
       "status": "spike",
-      "desc": "Spike 指南与本地验证脚本已完成，待 Philex 配置 OAuth 并运行连通测试",
+      "desc": "Spike 复跑：GSC 数据链路通过；GA4 API 可访问但当前账号无可见 Property",
       "members": [
         "creamy",
         "kael",
