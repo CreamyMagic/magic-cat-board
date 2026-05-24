@@ -23,6 +23,14 @@
         },
         {
           "title": "统筹 GA4/GSC Growth Analyst 启动",
+          "status": "done"
+        },
+        {
+          "title": "GA4/GSC 下一阶段执行计划已确认，分派 Phase A/B",
+          "status": "done"
+        },
+        {
+          "title": "GA4/GSC 下一轮执行项待 Philex 定稿",
           "status": "in_progress"
         }
       ]
@@ -41,6 +49,22 @@
         },
         {
           "title": "GA4/GSC Spike 凭证指南与验证脚本",
+          "status": "done"
+        },
+        {
+          "title": "GA4/GSC Phase A 安全与环境收口",
+          "status": "done"
+        },
+        {
+          "title": "GA4/GSC Phase B 本地 MVP 骨架",
+          "status": "done"
+        },
+        {
+          "title": "GA4/GSC Phase C 数据同步与标准化",
+          "status": "done"
+        },
+        {
+          "title": "GA4/GSC 首轮真实 Growth 报告",
           "status": "done"
         }
       ]
@@ -91,6 +115,10 @@
         },
         {
           "title": "GA4/GSC SEO 增长分析框架",
+          "status": "done"
+        },
+        {
+          "title": "GA4/GSC 首轮 Growth 报告模板",
           "status": "done"
         }
       ]
@@ -144,7 +172,7 @@
       "id": "ga4-gsc-growth",
       "name": "GA4 + GSC Growth Analyst",
       "status": "spike",
-      "desc": "Spike 复跑：GSC 数据链路通过；GA4 API 可访问但当前账号无可见 Property",
+      "desc": "首轮真实报告已验收：Cursive Generator 有 1,682 GSC 曝光但 0 点击，下一步修正品牌词、优化首页与埋点",
       "members": [
         "creamy",
         "kael",
@@ -152,8 +180,8 @@
         "velia"
       ],
       "tasks": {
-        "total": 5,
-        "done": 4
+        "total": 11,
+        "done": 9
       }
     }
   ],
@@ -172,6 +200,11 @@
       "name": "OBNotes 月度 Lint",
       "schedule": "每月 1 日 00:23",
       "agent": "velia"
+    },
+    {
+      "name": "全站每日流量分析报告",
+      "schedule": "每天 07:50",
+      "agent": "main"
     }
   ]
 }

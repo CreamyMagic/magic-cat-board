@@ -4,11 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magic Cat Team — Board v2</title>
-<link rel="icon" type="image/png" href="magic-cat-team-logo.png">
 <style>
 /* ═══════════════════════════════════════════
-   Magic Cat Team Board v2.1
-   + Password Gate / GitHub Pages Ready
+   Magic Cat Team Board v2.0
    Design: Lunaria · Implementation: Kael
    ═══════════════════════════════════════════ */
 
@@ -19,7 +17,7 @@
   --text-primary: #e1e4eb;
   --text-secondary: #8b8fa3;
   --divider: rgba(255,255,255,0.08);
-  --overlay: rgba(0,0,0,0.55);
+  --overlay: rgba(0,0,0,0.5);
 
   --accent-creamy: #a78bfa;   --glow-creamy: rgba(167,139,250,0.4);   --bg-creamy: rgba(167,139,250,0.08);
   --accent-amber:  #f59e0b;   --glow-amber:  rgba(245,158,11,0.4);   --bg-amber:  rgba(245,158,11,0.08);
@@ -43,45 +41,9 @@ body {
   line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased;
 }
 
-/* ═══ Password Gate ═══ */
-.auth-overlay {
-  position: fixed; inset: 0; background: var(--overlay);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  display: flex; align-items: center; justify-content: center; z-index: 1000;
-}
-.auth-dialog {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 16px; padding: 40px 36px; width: 360px; max-width: 90vw;
-  text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  animation: dialogIn 300ms ease-out;
-}
-@keyframes dialogIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
-.auth-dialog.shake { animation: shake 400ms ease-in-out; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
-.auth-icon img { width: 64px; height: 64px; object-fit: contain; }
-.auth-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-.auth-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
-.auth-input {
-  width: 100%; padding: 12px 16px; background: var(--bg);
-  border: 1px solid var(--card-border); border-radius: 10px;
-  color: var(--text-primary); font-size: 14px; outline: none; text-align: center;
-  transition: border-color 200ms; font-family: inherit;
-}
-.auth-input:focus { border-color: var(--accent-creamy); }
-.auth-input.error { border-color: var(--accent-kael); animation: shake 400ms ease-in-out; }
-.auth-error { font-size: 11px; color: var(--accent-kael); margin-top: 8px; min-height: 16px; }
-.auth-btn {
-  width: 100%; margin-top: 16px; padding: 10px; background: var(--accent-creamy);
-  border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: background 200ms; font-family: inherit;
-}
-.auth-btn:hover { background: #8b6fe6; }
-
 /* ── Header ── */
 .header { display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 24px; border-bottom: 1px solid var(--divider); }
-.header-left { display: flex; align-items: center; gap: 10px; }
-.header-logo { border-radius: 6px; }
+.header-left { display: flex; align-items: center; gap: 16px; }
 .header-title { font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
 .header-time { font-size: 11px; color: var(--text-secondary); font-family: "SF Mono", "Cascadia Code", monospace; }
 .header-right { display: flex; align-items: center; gap: 12px; }
@@ -217,265 +179,126 @@ body {
 .cron-agent { font-size: 9px; color: var(--accent-creamy); }
 
 /* ── Footer ── */
-.footer { display: flex; align-items: center; justify-content: space-between; height: 32px; padding: 0 24px; border-top: 1px solid var(--divider); font-size: 11px; color: var(--text-secondary); }
-.footer-time { font-family: "SF Mono","Cascadia Code",monospace; color: var(--text-secondary); opacity: 0.7; }
+.footer { display: flex; align-items: center; justify-content: center; height: 32px; padding: 0 24px; border-top: 1px solid var(--divider); font-size: 11px; color: var(--text-secondary); }
 .footer-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 3px; }
 .footer-dot.dot-active { background: var(--task-done); }
 .footer-dot.dot-standby { background: var(--text-secondary); }
 .footer-dot.dot-offline { background: var(--status-offline); }
 
-@media (prefers-reduced-motion: reduce) { .status-dot.active,.task-dot.in_progress,.card,.project-card { animation: none; } .card,.project-card { opacity: 1; } .card:hover,.project-card:hover { transform: none; } .progress-fill,.task-list { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .status-dot.active,.task-dot.in_progress { animation: none; } .card,.project-card { animation: none; opacity: 1; } .card:hover,.project-card:hover { transform: none; } .progress-fill { transition: none; } .task-list { transition: none; } }
 @media (max-width:1023px) and (min-width:600px) { .board { grid-template-columns: repeat(2,1fr); } .board.projects { grid-template-columns: 1fr; max-width: 500px; } }
-@media (max-width:599px) { .board,.board.projects { grid-template-columns: 1fr; padding: 16px; gap: 12px; } .header { padding: 0 16px; justify-content: center; } .header-left { gap: 0; flex-wrap: wrap; justify-content: center; } .header-title { font-size: 14px; width: 100%; text-align: center; margin-bottom: 6px; } .view-toggle { margin: 0 auto; } .toggle-btn { padding: 4px 10px; font-size: 11px; } .footer { flex-direction: column; height: auto; padding: 8px 16px; gap: 4px; } }
+@media (max-width:599px) { .board,.board.projects { grid-template-columns: 1fr; padding: 16px; gap: 12px; } .header { padding: 0 16px; } .header-title { font-size: 14px; } .header-left { gap: 8px; } .toggle-btn { padding: 4px 10px; font-size: 11px; } }
 </style>
 </head>
 <body>
 
-<!-- ═══ Password Gate ═══ -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-dialog" id="authDialog">
-    <div class="auth-icon"><img src="magic-cat-team-logo.png" alt="Magic Cat Team"></div>
-    <div class="auth-title">Magic Cat Team</div>
-    <div class="auth-subtitle">输入密码查看团队看板</div>
-    <input type="password" class="auth-input" id="authInput" placeholder="········" maxlength="32" autocomplete="off">
-    <div class="auth-error" id="authError"></div>
-    <button class="auth-btn" id="authBtn">进入</button>
-  </div>
-</div>
-
-<!-- ═══ Board ═══ -->
 <header class="header">
   <div class="header-left">
-    <img class="header-logo" src="magic-cat-team-logo.png" alt="Magic Cat Team" width="28" height="28">
-    <span class="header-title">Magic Cat Team</span>
+    <span class="header-title">✦ Magic Cat Team</span>
     <div class="view-toggle" id="viewToggle">
       <button class="toggle-btn active" data-view="members">成员视角</button>
       <button class="toggle-btn" data-view="projects">项目视角</button>
     </div>
   </div>
+  <span class="header-time" id="clock">Updated: --:--:--</span>
 </header>
 
 <main class="board" id="board"></main>
-<footer class="footer" id="footer"><span id="clock"></span></footer>
+<footer class="footer" id="footer"></footer>
 
 <script>
-// ═══════════════════════════════════════════
-// AUTH GATE
-// ═══════════════════════════════════════════
-(function() {
-  // Hash of the correct password (computed at build time)
-  const PASS_HASH = '6421abbc0af2ee0b9adc04f35f95ec49ca49f229bcad733c1763d3089c79af35';
-  const STORAGE_KEY = '_mct_auth';
-
-  async function sha256(text) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
-  }
-
-  function hideGate() {
-    const el = document.getElementById('authOverlay');
-    el.style.transition = 'opacity 300ms';
-    el.style.opacity = '0';
-    setTimeout(() => el.remove(), 400);
-  }
-
-  function showError(msg) {
-    const err = document.getElementById('authError');
-    const dialog = document.getElementById('authDialog');
-    const input = document.getElementById('authInput');
-    err.textContent = msg;
-    dialog.classList.remove('shake');
-    void dialog.offsetWidth; // force reflow
-    dialog.classList.add('shake');
-    input.classList.add('error');
-    input.value = '';
-    input.focus();
-  }
-
-  async function tryLogin() {
-    const input = document.getElementById('authInput');
-    const pwd = input.value.trim();
-    if (!pwd) return showError('请输入密码');
-
-    const hash = await sha256(pwd);
-    if (hash === PASS_HASH) {
-      sessionStorage.setItem(STORAGE_KEY, '1');
-      hideGate();
-    } else {
-      showError('密码错误，再试一次');
-    }
-  }
-
-  // Check if already authenticated this session
-  if (sessionStorage.getItem(STORAGE_KEY) === '1') {
-    hideGate();
-  } else {
-    const input = document.getElementById('authInput');
-    const btn = document.getElementById('authBtn');
-
-    btn.addEventListener('click', tryLogin);
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-    input.focus();
-  }
-})();
-
 // ═══════════════════════════════════════════
 // DATA
 // ═══════════════════════════════════════════
 const BOARD_DATA = {
-  "updated": "2026-05-23T21:55:00+08:00",
-  "agents": [
+  updated: null,
+  agents: [
     {
-      "id": "creamy",
-      "name": "Creamy",
-      "role": "领袖 / 协调者",
-      "avatar": "creamy.png",
-      "status": "active",
-      "model": "gpt-5.5 (Custom Provider)",
-      "tasks": [
-        {
-          "title": "BOARD.html → GitHub Pages 部署 + 密码认证",
-          "status": "done"
-        },
-        {
-          "title": "修复头像/Cron/任务展开/死亡任务",
-          "status": "done"
-        },
-        {
-          "title": "修复移动端布局 + 模型配置",
-          "status": "done"
-        },
-        {
-          "title": "等待新任务指派",
-          "status": "pending"
-        }
+      id: "creamy", name: "Creamy", role: "领袖 / 协调者",
+      avatar: "avatars/creamy.png",
+      status: "active", model: "gpt-5.5",
+      tasks: [
+        {title:"协调团队任务分发与验收",status:"in_progress"},
+        {title:"夜间巡检 Schema 验收",status:"done"},
+        {title:"BOARD.html v1 验收",status:"done"},
+        {title:"Cron 自动化审计推进",status:"pending"},
+        {title:"团队规则同步",status:"pending"}
       ]
     },
     {
-      "id": "kael",
-      "name": "Kael",
-      "role": "重装工匠 / 执行者",
-      "avatar": "kael.png",
-      "status": "standby",
-      "model": "Gemini 3.5 Flash",
-      "tasks": [
-        {
-          "title": "等待新任务指派",
-          "status": "pending"
-        }
+      id: "amber", name: "Amber", role: "吟游诗人 / 表达者",
+      avatar: "avatars/amber.png",
+      status: "standby", model: "deepseek-v4-flash",
+      tasks: [
+        {title:"等待内容创作任务指派",status:"pending"},
+        {title:"品牌叙事框架调研",status:"pending"},
+        {title:"社交媒体文案模板",status:"pending"}
       ]
     },
     {
-      "id": "velia",
-      "name": "Velia",
-      "role": "史官 / 知识官",
-      "avatar": "velia.png",
-      "status": "standby",
-      "model": "DeepSeek V4 Flash",
-      "tasks": [
-        {
-          "title": "OBNotes 知识库日常维护",
-          "status": "in_progress"
-        },
-        {
-          "title": "Weekly Clippings Digest (每周日 23:43)",
-          "status": "pending"
-        }
+      id: "kael", name: "Kael", role: "重装工匠 / 执行者",
+      avatar: "avatars/kael.png",
+      status: "active", model: "deepseek-v4-pro",
+      tasks: [
+        {title:"夜间巡检 Cron + launchd 安装",status:"done"},
+        {title:"BOARD.html v1 实现",status:"done"},
+        {title:"BOARD.html v2 任务展开+视角切换",status:"in_progress"},
+        {title:"Cron 扩展落地（等 Creamy 审计）",status:"pending"}
       ]
     },
     {
-      "id": "lunaria",
-      "name": "Lunaria",
-      "role": "幻术师 / 创意家",
-      "avatar": "lunaria.png",
-      "status": "standby",
-      "model": "Gemini 3.5 Flash",
-      "tasks": [
-        {
-          "title": "等待产品/视觉需求",
-          "status": "pending"
-        }
+      id: "velia", name: "Velia", role: "史官 / 知识官",
+      avatar: "avatars/velia.png",
+      status: "standby", model: "gpt-5.5",
+      tasks: [
+        {title:"夜间巡检知识分类 Schema v1.0",status:"done"},
+        {title:"OBNotes 知识库日常维护",status:"pending"}
       ]
     },
     {
-      "id": "orion",
-      "name": "Orion",
-      "role": "占星师 / 研究员",
-      "avatar": "orion.png",
-      "status": "standby",
-      "model": "gpt-5.5 (Custom Provider)",
-      "tasks": [
-        {
-          "title": "每日 AI 新闻早报 (08:11)",
-          "status": "pending"
-        }
+      id: "lunaria", name: "Lunaria", role: "幻术师 / 创意家",
+      avatar: "avatars/lunaria.png",
+      status: "standby", model: "deepseek-v4-pro",
+      tasks: [
+        {title:"BOARD.html 视觉设计规范",status:"done"},
+        {title:"等待下一轮产品/视觉需求",status:"pending"}
       ]
     },
     {
-      "id": "amber",
-      "name": "Amber",
-      "role": "吟游诗人 / 表达者",
-      "avatar": "amber.png",
-      "status": "standby",
-      "model": "Gemini 3.5 Flash",
-      "tasks": [
-        {
-          "title": "等待内容创作任务指派",
-          "status": "pending"
-        }
+      id: "orion", name: "Orion", role: "占星师 / 研究员",
+      avatar: "avatars/orion.png",
+      status: "standby", model: "deepseek-v4-pro",
+      tasks: [
+        {title:"AI 新闻早报 Cron 作业",status:"done"},
+        {title:"等待研究/调研任务指派",status:"pending"},
+        {title:"文案质量检查流程待定",status:"pending"}
       ]
     }
   ],
-  "projects": [
+  projects: [
     {
-      "id": "cursive-generator",
-      "name": "Cursive Generator",
-      "status": "active",
-      "desc": "cursive-text-generator，内页功能迭代中",
-      "members": [
-        "kael",
-        "velia",
-        "lunaria"
-      ],
-      "tasks": {
-        "total": 6,
-        "done": 5
-      }
+      id: "night-patrol", name: "夜间巡检", status: "dev",
+      desc: "每日 00:53 自动扫描全队知识，按 8 维 Schema 分类输出",
+      members: ["creamy","velia","kael"],
+      tasks: { total: 5, done: 4 }
     },
     {
-      "id": "magic-board",
-      "name": "Magic Cat Board",
-      "status": "dev",
-      "desc": "GitHub Pages 看板 v2.1，密码认证 + 双视角",
-      "members": [
-        "creamy",
-        "kael"
-      ],
-      "tasks": {
-        "total": 5,
-        "done": 4
-      }
+      id: "board", name: "BOARD 看板", status: "dev",
+      desc: "团队状态看板，支持成员/项目双视角",
+      members: ["creamy","lunaria","kael"],
+      tasks: { total: 4, done: 3 }
+    },
+    {
+      id: "cron-ext", name: "Cron 自动化扩展", status: "audit",
+      desc: "审计现有 Cron 作业 + 新增 1-3 个自动化任务",
+      members: ["creamy","kael","velia"],
+      tasks: { total: 3, done: 0 }
     }
   ],
-  "crons": [
-    {
-      "name": "每日 AI 新闻早报",
-      "schedule": "每天 08:11",
-      "agent": "orion"
-    },
-    {
-      "name": "Weekly Clippings Digest",
-      "schedule": "每周日 23:43",
-      "agent": "velia"
-    },
-    {
-      "name": "OBNotes 月度 Lint",
-      "schedule": "每月 1 日 00:23",
-      "agent": "velia"
-    }
+  crons: [
+    { id:"426639b7", name:"睡觉提醒 + Velia 总结", schedule:"每天 23:00", agent:"main" },
+    { id:"4f416af6", name:"AI 新闻早报", schedule:"每天 08:11", agent:"orion" },
+    { id:"c9908641", name:"OBNotes 月度 Lint", schedule:"每月 1 日 00:23", agent:"velia" }
   ]
 };
 
@@ -485,24 +308,41 @@ const BOARD_DATA = {
 (function() {
   const board = document.getElementById('board');
   const footer = document.getElementById('footer');
+  const clock = document.getElementById('clock');
   const toggle = document.getElementById('viewToggle');
   let currentView = 'members';
 
+  // ── Helpers ──
   function accentFor(id) { return getComputedStyle(document.documentElement).getPropertyValue('--accent-'+id).trim(); }
   function bgFor(id) { return getComputedStyle(document.documentElement).getPropertyValue('--bg-'+id).trim(); }
   function statusClass(s) { return s==='active'?'active':s==='standby'?'standby':'offline'; }
   function initial(n) { return (n||'?').charAt(0).toUpperCase(); }
-  function taskStats(tasks) { const total=tasks.length, done=tasks.filter(t=>t.status==='done').length, inprog=tasks.filter(t=>t.status==='in_progress').length; return{total,done,inprog}; }
 
+  function taskStats(tasks) {
+    const total = tasks.length;
+    const done = tasks.filter(t=>t.status==='done').length;
+    const inprog = tasks.filter(t=>t.status==='in_progress').length;
+    return {total,done,inprog};
+  }
+
+  function statusIcon(s) {
+    if (s==='done') return '✓';
+    if (s==='in_progress') return '◉';
+    return '○';
+  }
+
+  // ── Member card ──
   function renderMemberCard(a) {
     const stats = taskStats(a.tasks||[]);
     const pct = stats.total>0 ? Math.round((stats.done/stats.total)*100) : 0;
     const init = initial(a.name);
+
     const taskItems = (a.tasks||[]).map(t=>`
       <div class="task-item">
         <span class="task-dot ${t.status}"></span>
         <span class="task-title ${t.status==='done'?'done':''}">${t.title}</span>
       </div>`).join('');
+
     return `
       <div class="card" data-agent="${a.id}">
         <div class="status-dot ${statusClass(a.status)}" title="${a.status}"></div>
@@ -520,15 +360,18 @@ const BOARD_DATA = {
         <div class="progress-wrap">
           ${stats.total>0 ? `
             <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-            <div class="progress-label open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+            <div class="progress-label" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
               ${stats.done}/${stats.total}
             </div>
-            <div class="task-list open">${taskItems}</div>
-          ` : `<div class="progress-label" style="text-align:center;opacity:0.5;cursor:default">—</div>`}
+            <div class="task-list">${taskItems}</div>
+          ` : `
+            <div class="progress-label" style="text-align:center;opacity:0.5;cursor:default">—</div>
+          `}
         </div>
       </div>`;
   }
 
+  // ── Project card ──
   const agentMeta = {};
   BOARD_DATA.agents.forEach(a=>{ agentMeta[a.id] = a; });
 
@@ -537,30 +380,41 @@ const BOARD_DATA = {
     if (!a) return `<span class="member-chip"><span class="member-chip-initial" style="background:var(--text-secondary)">?</span> ${agentId}</span>`;
     const init = initial(a.name);
     const accent = accentFor(agentId);
-    return `<span class="member-chip" title="${a.name} · ${a.role}">
-      ${a.avatar ? `<img class="member-chip-avatar" src="${a.avatar}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
-      <span class="member-chip-initial" style="background:${accent};${a.avatar?'display:none':''}">${init}</span>
-      ${a.name}
-    </span>`;
+    return `
+      <span class="member-chip" title="${a.name} · ${a.role}">
+        ${a.avatar ? `<img class="member-chip-avatar" src="${a.avatar}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+        <span class="member-chip-initial" style="background:${accent};${a.avatar?'display:none':''}">${init}</span>
+        ${a.name}
+      </span>`;
   }
 
-  function statusBadgeClass(s) { return {dev:'dev',active:'dev',design:'design',audit:'audit'}[s]||'active'; }
-  function statusLabel(s) { return {dev:'开发中',design:'设计中',audit:'审计中',active:'运行中'}[s]||s; }
+  function statusBadgeClass(s) {
+    if (s==='dev'||s==='active') return 'dev';
+    if (s==='design') return 'design';
+    if (s==='audit') return 'audit';
+    return 'active';
+  }
+
+  function statusLabel(s) {
+    const map = {dev:'开发中',design:'设计中',audit:'审计中',active:'运行中'};
+    return map[s]||s;
+  }
 
   function renderProjectCard(p) {
     const pct = p.tasks.total>0 ? Math.round((p.tasks.done/p.tasks.total)*100) : 0;
-    return `<div class="project-card">
-      <div class="project-header">
-        <span class="project-name">${p.name}</span>
-        <span class="project-status ${statusBadgeClass(p.status)}">${statusLabel(p.status)}</span>
-      </div>
-      <div class="project-desc">${p.desc}</div>
-      <div class="project-members">${(p.members||[]).map(renderMemberChip).join('')}</div>
-      <div class="project-progress">
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <span class="progress-label">${p.tasks.done}/${p.tasks.total}</span>
-      </div>
-    </div>`;
+    return `
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">${p.name}</span>
+          <span class="project-status ${statusBadgeClass(p.status)}">${statusLabel(p.status)}</span>
+        </div>
+        <div class="project-desc">${p.desc}</div>
+        <div class="project-members">${(p.members||[]).map(renderMemberChip).join('')}</div>
+        <div class="project-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <span class="progress-label">${p.tasks.done}/${p.tasks.total}</span>
+        </div>
+      </div>`;
   }
 
   function renderCronSection() {
@@ -570,20 +424,25 @@ const BOARD_DATA = {
         <span class="cron-schedule">${c.schedule}</span>
         <span class="cron-agent">@${c.agent}</span>
       </div>`).join('');
-    return `<div class="project-card">
-      <div class="project-header">
-        <span class="project-name">⚡ Cron 作业</span>
-        <span class="project-status active">${BOARD_DATA.crons.length} 个运行中</span>
-      </div>
-      <div class="cron-section">${items}</div>
-    </div>`;
+
+    return `
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">⚡ Cron 作业</span>
+          <span class="project-status active">${BOARD_DATA.crons.length} 个运行中</span>
+        </div>
+        <div class="cron-section">${items}</div>
+      </div>`;
   }
 
+  // ── Render ──
   function renderBoard(view) {
     currentView = view;
     if (view === 'projects') {
       board.className = 'board projects';
-      board.innerHTML = BOARD_DATA.projects.map(renderProjectCard).join('') + renderCronSection();
+      const projectCards = BOARD_DATA.projects.map(renderProjectCard).join('');
+      const cronCard = renderCronSection();
+      board.innerHTML = projectCards + cronCard;
     } else {
       board.className = 'board';
       board.innerHTML = BOARD_DATA.agents.map(renderMemberCard).join('');
@@ -592,20 +451,24 @@ const BOARD_DATA = {
   }
 
   function renderFooter(view) {
-    const now = new Date();
-    const timeStr = [now.getHours(),now.getMinutes(),now.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
-    const timeHtml = `<span class="footer-time">${timeStr}</span>`;
     if (view === 'projects') {
-      const p = BOARD_DATA.projects;
-      footer.innerHTML = `<span>Projects: ${p.length} · Tasks: ${p.reduce((s,x)=>s+x.tasks.done,0)}/${p.reduce((s,x)=>s+x.tasks.total,0)} · Crons: ${(BOARD_DATA.crons||[]).length}</span>${timeHtml}`;
+      const totalProjects = BOARD_DATA.projects.length;
+      const totalDone = BOARD_DATA.projects.reduce((s,p)=>s+p.tasks.done,0);
+      const totalAll = BOARD_DATA.projects.reduce((s,p)=>s+p.tasks.total,0);
+      footer.innerHTML = `Projects: ${totalProjects} · Tasks: ${totalDone}/${totalAll} · Crons: ${(BOARD_DATA.crons||[]).length}`;
     } else {
-      const a = BOARD_DATA.agents;
-      const active = a.filter(x=>x.status==='active').length, standby = a.filter(x=>x.status==='standby').length, offline = a.filter(x=>x.status==='offline').length;
-      const stats = a.map(x=>taskStats(x.tasks||[]));
-      footer.innerHTML = `<span><span class="footer-dot dot-active"></span> Active: ${active} · <span class="footer-dot dot-standby"></span> Standby: ${standby} · <span class="footer-dot dot-offline"></span> Offline: ${offline} · Tasks: ${stats.reduce((s,st)=>s+st.done,0)}/${stats.reduce((s,st)=>s+st.total,0)}</span>${timeHtml}`;
+      const agents = BOARD_DATA.agents;
+      const active = agents.filter(a=>a.status==='active').length;
+      const standby = agents.filter(a=>a.status==='standby').length;
+      const offline = agents.filter(a=>a.status==='offline').length;
+      const stats = agents.map(a=>taskStats(a.tasks||[]));
+      const totalDone = stats.reduce((s,st)=>s+st.done,0);
+      const totalAll = stats.reduce((s,st)=>s+st.total,0);
+      footer.innerHTML = `<span class="footer-dot dot-active"></span> Active: ${active} · <span class="footer-dot dot-standby"></span> Standby: ${standby} · <span class="footer-dot dot-offline"></span> Offline: ${offline} · Tasks: ${totalDone}/${totalAll}`;
     }
   }
 
+  // ── View toggle ──
   toggle.addEventListener('click', function(e) {
     const btn = e.target.closest('.toggle-btn');
     if (!btn) return;
@@ -615,10 +478,13 @@ const BOARD_DATA = {
     renderBoard(view);
   });
 
+  // ── Clock ──
   function tick() {
-    renderFooter(currentView);
+    const now = new Date();
+    clock.textContent = 'Updated: ' + [now.getHours(),now.getMinutes(),now.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
   }
 
+  // ── Load external data ──
   async function loadData() {
     try {
       const resp = await fetch('board-data.json');
@@ -627,12 +493,15 @@ const BOARD_DATA = {
         if (json.agents) BOARD_DATA.agents = json.agents;
         if (json.projects) BOARD_DATA.projects = json.projects;
         if (json.crons) BOARD_DATA.crons = json.crons;
+        if (json.updated) BOARD_DATA.updated = json.updated;
+        // Rebuild agentMeta
         agentMeta.length = 0;
         BOARD_DATA.agents.forEach(a=>{ agentMeta[a.id] = a; });
       }
     } catch(_) {}
   }
 
+  // ── Init ──
   (async function init() {
     await loadData();
     renderBoard('members');
