@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-23T21:55:00+08:00",
+  "updated": "2026-05-24T15:17:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -7,7 +7,7 @@
       "role": "领袖 / 协调者",
       "avatar": "creamy.png",
       "status": "active",
-      "model": "gpt-5.5 (Custom Provider)",
+      "model": "gpt-5.5",
       "tasks": [
         {
           "title": "BOARD.html → GitHub Pages 部署 + 密码认证",
@@ -22,8 +22,8 @@
           "status": "done"
         },
         {
-          "title": "等待新任务指派",
-          "status": "pending"
+          "title": "统筹 GA4/GSC Growth Analyst 启动",
+          "status": "in_progress"
         }
       ]
     },
@@ -32,12 +32,12 @@
       "name": "Kael",
       "role": "重装工匠 / 执行者",
       "avatar": "kael.png",
-      "status": "standby",
+      "status": "active",
       "model": "Gemini 3.5 Flash",
       "tasks": [
         {
-          "title": "等待新任务指派",
-          "status": "pending"
+          "title": "GA4/GSC OAuth 技术接入方案",
+          "status": "done"
         }
       ]
     },
@@ -78,12 +78,16 @@
       "name": "Orion",
       "role": "占星师 / 研究员",
       "avatar": "orion.png",
-      "status": "standby",
-      "model": "gpt-5.5 (Custom Provider)",
+      "status": "active",
+      "model": "gpt-5.5",
       "tasks": [
         {
           "title": "每日 AI 新闻早报 (08:11)",
           "status": "pending"
+        },
+        {
+          "title": "GA4/GSC SEO 增长分析框架",
+          "status": "done"
         }
       ]
     },
@@ -130,6 +134,22 @@
       "tasks": {
         "total": 5,
         "done": 4
+      }
+    },
+    {
+      "id": "ga4-gsc-growth",
+      "name": "GA4 + GSC Growth Analyst",
+      "status": "planning",
+      "desc": "自用增长分析项目：策略框架与 OAuth 技术方案已完成，待 Philex 确认进入 Spike",
+      "members": [
+        "creamy",
+        "kael",
+        "orion",
+        "velia"
+      ],
+      "tasks": {
+        "total": 4,
+        "done": 3
       }
     }
   ],
