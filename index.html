@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magic Cat Team — Board v2</title>
+<link rel="icon" type="image/png" href="magic-cat-team-logo.png">
 <style>
 /* ═══════════════════════════════════════════
    Magic Cat Team Board v2.0
@@ -40,6 +41,41 @@ body {
   font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased;
 }
+
+/* ═══ Password Gate ═══ */
+.auth-overlay {
+  position: fixed; inset: 0; background: var(--overlay);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.auth-dialog {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 40px 36px; width: 360px; max-width: 90vw;
+  text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: dialogIn 300ms ease-out;
+}
+@keyframes dialogIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.auth-dialog.shake { animation: shake 400ms ease-in-out; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
+.auth-icon img { width: 64px; height: 64px; object-fit: contain; }
+.auth-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.auth-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
+.auth-input {
+  width: 100%; padding: 12px 16px; background: var(--bg);
+  border: 1px solid var(--card-border); border-radius: 10px;
+  color: var(--text-primary); font-size: 14px; outline: none; text-align: center;
+  transition: border-color 200ms; font-family: inherit;
+}
+.auth-input:focus { border-color: var(--accent-creamy); }
+.auth-input.error { border-color: var(--accent-kael); animation: shake 400ms ease-in-out; }
+.auth-error { font-size: 11px; color: var(--accent-kael); margin-top: 8px; min-height: 16px; }
+.auth-btn {
+  width: 100%; margin-top: 16px; padding: 10px; background: var(--accent-creamy);
+  border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background 200ms; font-family: inherit;
+}
+.auth-btn:hover { background: #8b6fe6; }
 
 /* ── Header ── */
 .header { display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 24px; border-bottom: 1px solid var(--divider); }
@@ -192,6 +228,18 @@ body {
 </head>
 <body>
 
+<!-- ═══ Password Gate ═══ -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-dialog" id="authDialog">
+    <div class="auth-icon"><img src="magic-cat-team-logo.png" alt="Magic Cat Team"></div>
+    <div class="auth-title">Magic Cat Team</div>
+    <div class="auth-subtitle">输入密码查看团队看板</div>
+    <input type="password" class="auth-input" id="authInput" placeholder="········" maxlength="32" autocomplete="off">
+    <div class="auth-error" id="authError"></div>
+    <button class="auth-btn" id="authBtn">进入</button>
+  </div>
+</div>
+
 <header class="header">
   <div class="header-left">
     <span class="header-title">✦ Magic Cat Team</span>
@@ -207,6 +255,66 @@ body {
 <footer class="footer" id="footer"></footer>
 
 <script>
+// ═══════════════════════════════════════════
+// AUTH GATE
+// ═══════════════════════════════════════════
+(function() {
+  const PASS_HASH = '6421abbc0af2ee0b9adc04f35f95ec49ca49f229bcad733c1763d3089c79af35';
+  const STORAGE_KEY = '_mct_auth';
+
+  async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function hideGate() {
+    const el = document.getElementById('authOverlay');
+    el.style.transition = 'opacity 300ms';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 400);
+  }
+
+  function showError(msg) {
+    const err = document.getElementById('authError');
+    const dialog = document.getElementById('authDialog');
+    const input = document.getElementById('authInput');
+    err.textContent = msg;
+    dialog.classList.remove('shake');
+    void dialog.offsetWidth;
+    dialog.classList.add('shake');
+    input.classList.add('error');
+    input.value = '';
+    input.focus();
+  }
+
+  async function tryLogin() {
+    const input = document.getElementById('authInput');
+    const pwd = input.value.trim();
+    if (!pwd) return showError('请输入密码');
+
+    const hash = await sha256(pwd);
+    if (hash === PASS_HASH) {
+      sessionStorage.setItem(STORAGE_KEY, '1');
+      hideGate();
+    } else {
+      showError('密码错误，再试一次');
+    }
+  }
+
+  if (sessionStorage.getItem(STORAGE_KEY) === '1') {
+    hideGate();
+  } else {
+    const input = document.getElementById('authInput');
+    const btn = document.getElementById('authBtn');
+    btn.addEventListener('click', tryLogin);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+    input.focus();
+  }
+})();
+
 // ═══════════════════════════════════════════
 // DATA
 // ═══════════════════════════════════════════
