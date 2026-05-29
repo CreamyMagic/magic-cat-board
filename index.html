@@ -536,7 +536,6 @@ const BOARD_DATA = {
         <span class="task-title ${t.status==='done'?'done':''}">${t.title}</span>
         <span class="project-owner">@${t.owner}</span>
       </div>`).join('');
-    const memberItems = (p.members||[]).map(renderMemberRow).join('');
     return `
       <div class="project-card">
         <div class="project-header">
@@ -552,8 +551,6 @@ const BOARD_DATA = {
         <div class="project-details">
           <div class="project-section-title">任务</div>
           ${taskItems || '<div class="project-task-item">暂无任务</div>'}
-          <div class="project-section-title">成员</div>
-          ${memberItems}
         </div>
       </div>`;
   }
