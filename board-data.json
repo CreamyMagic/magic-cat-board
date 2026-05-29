@@ -152,21 +152,6 @@
   ],
   "projects": [
     {
-      "id": "cursive-generator",
-      "name": "Cursive Generator",
-      "status": "active",
-      "desc": "cursive-text-generator，内页功能迭代中",
-      "members": [
-        "kael",
-        "velia",
-        "lunaria"
-      ],
-      "tasks": {
-        "total": 6,
-        "done": 5
-      }
-    },
-    {
       "id": "magic-board",
       "name": "Magic Cat Board",
       "status": "dev",
@@ -178,7 +163,24 @@
       "tasks": {
         "total": 5,
         "done": 4
-      }
+      },
+      "taskList": [
+        {
+          "title": "恢复前端密码门",
+          "status": "done",
+          "owner": "creamy"
+        },
+        {
+          "title": "项目/成员双视角展示",
+          "status": "done",
+          "owner": "kael"
+        },
+        {
+          "title": "项目卡片支持展开任务与成员明细",
+          "status": "in_progress",
+          "owner": "creamy"
+        }
+      ]
     },
     {
       "id": "ga4-gsc-growth",
@@ -194,7 +196,24 @@
       "tasks": {
         "total": 11,
         "done": 9
-      }
+      },
+      "taskList": [
+        {
+          "title": "首轮真实 Growth 报告",
+          "status": "done",
+          "owner": "orion"
+        },
+        {
+          "title": "数据同步与标准化",
+          "status": "done",
+          "owner": "kael"
+        },
+        {
+          "title": "下一轮执行项待定稿",
+          "status": "in_progress",
+          "owner": "creamy"
+        }
+      ]
     },
     {
       "id": "wizard-alchemy",
@@ -209,7 +228,24 @@
       "tasks": {
         "total": 3,
         "done": 0
-      }
+      },
+      "taskList": [
+        {
+          "title": "本轮游戏内容更新调研",
+          "status": "in_progress",
+          "owner": "orion"
+        },
+        {
+          "title": "页面更新开发",
+          "status": "pending",
+          "owner": "kael"
+        },
+        {
+          "title": "持续更新循环统筹",
+          "status": "in_progress",
+          "owner": "creamy"
+        }
+      ]
     }
   ],
   "crons": [

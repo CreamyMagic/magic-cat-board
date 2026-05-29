@@ -205,7 +205,13 @@ body {
 .project-progress .progress-bar { flex: 1; background: var(--divider); }
 .project-progress .progress-fill { background: var(--text-secondary); }
 .project-progress .progress-label { font-size: 10px; color: var(--text-secondary); margin-top: 0; cursor: default; }
-.project-progress .progress-label::after { display: none; }
+.project-progress .progress-label::after { content: ' ▸'; display: inline-block; }
+.project-progress .progress-label.open::after { transform: rotate(90deg); }
+.project-details { width: 100%; max-height: 0; overflow: hidden; transition: max-height 300ms ease-out, margin 200ms; margin-top: 0; }
+.project-details.open { max-height: 360px; margin-top: 8px; }
+.project-section-title { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin: 8px 0 6px; }
+.project-task-item, .project-member-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 11px; color: var(--text-secondary); }
+.project-owner { margin-left: auto; font-size: 10px; color: var(--text-primary); opacity: 0.8; }
 
 /* Cron section */
 .cron-section { margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--divider); }
@@ -483,6 +489,20 @@ const BOARD_DATA = {
   const agentMeta = {};
   BOARD_DATA.agents.forEach(a=>{ agentMeta[a.id] = a; });
 
+  function renderMemberRow(agentId) {
+    const a = agentMeta[agentId];
+    if (!a) return `<div class="project-member-item"><span class="member-chip-initial" style="background:var(--text-secondary)">?</span><span>${agentId}</span></div>`;
+    const init = initial(a.name);
+    const accent = accentFor(agentId);
+    return `
+      <div class="project-member-item" title="${a.role}">
+        ${a.avatar ? `<img class="member-chip-avatar" src="${a.avatar}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+        <span class="member-chip-initial" style="background:${accent};${a.avatar?'display:none':''}">${init}</span>
+        <span>${a.name}</span>
+        <span class="project-owner">${a.role}</span>
+      </div>`;
+  }
+
   function renderMemberChip(agentId) {
     const a = agentMeta[agentId];
     if (!a) return `<span class="member-chip"><span class="member-chip-initial" style="background:var(--text-secondary)">?</span> ${agentId}</span>`;
@@ -510,6 +530,13 @@ const BOARD_DATA = {
 
   function renderProjectCard(p) {
     const pct = p.tasks.total>0 ? Math.round((p.tasks.done/p.tasks.total)*100) : 0;
+    const taskItems = (p.taskList||[]).map(t=>`
+      <div class="project-task-item">
+        <span class="task-dot ${t.status}"></span>
+        <span class="task-title ${t.status==='done'?'done':''}">${t.title}</span>
+        <span class="project-owner">@${t.owner}</span>
+      </div>`).join('');
+    const memberItems = (p.members||[]).map(renderMemberRow).join('');
     return `
       <div class="project-card">
         <div class="project-header">
@@ -520,7 +547,13 @@ const BOARD_DATA = {
         <div class="project-members">${(p.members||[]).map(renderMemberChip).join('')}</div>
         <div class="project-progress">
           <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-          <span class="progress-label">${p.tasks.done}/${p.tasks.total}</span>
+          <span class="progress-label" onclick="this.classList.toggle('open');this.parentElement.nextElementSibling.classList.toggle('open')">${p.tasks.done}/${p.tasks.total}</span>
+        </div>
+        <div class="project-details">
+          <div class="project-section-title">任务</div>
+          ${taskItems || '<div class="project-task-item">暂无任务</div>'}
+          <div class="project-section-title">成员</div>
+          ${memberItems}
         </div>
       </div>`;
   }
