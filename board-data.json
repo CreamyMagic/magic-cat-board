@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-24T16:35:00+08:00",
+  "updated": "2026-05-29T22:25:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -31,6 +31,10 @@
         },
         {
           "title": "GA4/GSC 下一轮执行项待 Philex 定稿",
+          "status": "in_progress"
+        },
+        {
+          "title": "统筹 wizard-alchemy 持续更新循环",
           "status": "in_progress"
         }
       ]
@@ -66,6 +70,10 @@
         {
           "title": "GA4/GSC 首轮真实 Growth 报告",
           "status": "done"
+        },
+        {
+          "title": "wizard-alchemy 本轮页面更新开发（待 Orion 交付后启动）",
+          "status": "pending"
         }
       ]
     },
@@ -120,6 +128,10 @@
         {
           "title": "GA4/GSC 首轮 Growth 报告模板",
           "status": "done"
+        },
+        {
+          "title": "wizard-alchemy 本轮游戏内容更新调研",
+          "status": "in_progress"
         }
       ]
     },
@@ -182,6 +194,21 @@
       "tasks": {
         "total": 11,
         "done": 9
+      }
+    },
+    {
+      "id": "wizard-alchemy",
+      "name": "Wizard Alchemy",
+      "status": "active",
+      "desc": "已完成前期调研与前期开发上线，进入持续调研更新 → 页面落地循环",
+      "members": [
+        "creamy",
+        "orion",
+        "kael"
+      ],
+      "tasks": {
+        "total": 3,
+        "done": 0
       }
     }
   ],
