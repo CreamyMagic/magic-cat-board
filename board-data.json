@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-29T22:25:00+08:00",
+  "updated": "2026-05-30T09:31:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -73,7 +73,7 @@
         },
         {
           "title": "wizard-alchemy 本轮页面更新开发（待 Orion 交付后启动）",
-          "status": "pending"
+          "status": "in_progress"
         }
       ]
     },
@@ -131,7 +131,7 @@
         },
         {
           "title": "wizard-alchemy 本轮游戏内容更新调研",
-          "status": "in_progress"
+          "status": "done"
         }
       ]
     },
@@ -227,7 +227,7 @@
       ],
       "tasks": {
         "total": 3,
-        "done": 0
+        "done": 1
       },
       "taskList": [
         {
