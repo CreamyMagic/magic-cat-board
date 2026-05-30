@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-30T10:36:00+08:00",
+  "updated": "2026-05-30T10:43:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -231,7 +231,7 @@
       "id": "wizard-alchemy",
       "name": "Wizard Alchemy",
       "status": "active",
-      "desc": "Orion 2026-05-30 Druid Event 与 8-code 调研已真实提交；Kael 已接手 P0 页面更新开发",
+      "desc": "Orion 2026-05-30 调研已完成；非项目流程文件已移除；Kael 正在基于 Druid Event 与 8-code 新热点执行 P0 页面更新",
       "members": [
         "creamy",
         "orion",
