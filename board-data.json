@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-30T10:30:00+08:00",
+  "updated": "2026-05-30T10:33:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -77,7 +77,7 @@
         },
         {
           "title": "wizard-alchemy Git 提交规范与审计补齐",
-          "status": "in_progress"
+          "status": "done"
         }
       ]
     },
@@ -227,7 +227,7 @@
       "id": "wizard-alchemy",
       "name": "Wizard Alchemy",
       "status": "active",
-      "desc": "验收发现本轮 Orion 未产生新调研输出/新 task；已驳回并要求补做真实调研提交，Kael 暂停等待新交付",
+      "desc": "Git 提交规范与审计日志已由 Kael 真实提交；本轮 Orion 调研输出/新 task 仍需补做，Kael 页面开发暂待新调研交付",
       "members": [
         "creamy",
         "orion",
@@ -235,7 +235,7 @@
       ],
       "tasks": {
         "total": 4,
-        "done": 0
+        "done": 1
       },
       "taskList": [
         {
