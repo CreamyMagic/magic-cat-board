@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-30T09:40:00+08:00",
+  "updated": "2026-05-30T10:27:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -73,7 +73,11 @@
         },
         {
           "title": "wizard-alchemy 本轮页面更新开发（待 Orion 交付后启动）",
-          "status": "done"
+          "status": "in_progress"
+        },
+        {
+          "title": "wizard-alchemy Git 提交规范与审计补齐",
+          "status": "in_progress"
         }
       ]
     },
@@ -219,15 +223,15 @@
       "id": "wizard-alchemy",
       "name": "Wizard Alchemy",
       "status": "active",
-      "desc": "本轮调研与页面更新完成，已修复 pnpm 11 构建依赖审批并推送远端，进入下一轮持续更新待命",
+      "desc": "验收发现 Git 归属与补充文档未真实落库；Kael 正在补齐规范文档、审计日志与独立 author 提交链路",
       "members": [
         "creamy",
         "orion",
         "kael"
       ],
       "tasks": {
-        "total": 3,
-        "done": 2
+        "total": 4,
+        "done": 1
       },
       "taskList": [
         {
