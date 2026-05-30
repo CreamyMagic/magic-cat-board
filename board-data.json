@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-30T10:33:00+08:00",
+  "updated": "2026-05-30T10:36:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -73,11 +73,15 @@
         },
         {
           "title": "wizard-alchemy 本轮页面更新开发（待 Orion 交付后启动）",
-          "status": "pending"
+          "status": "in_progress"
         },
         {
           "title": "wizard-alchemy Git 提交规范与审计补齐",
           "status": "done"
+        },
+        {
+          "title": "wizard-alchemy 2026-05-30 Druid Event 页面更新",
+          "status": "in_progress"
         }
       ]
     },
@@ -135,11 +139,11 @@
         },
         {
           "title": "wizard-alchemy 本轮游戏内容更新调研",
-          "status": "in_progress"
+          "status": "done"
         },
         {
           "title": "wizard-alchemy 补做本轮真实调研输出与新任务队列",
-          "status": "in_progress"
+          "status": "done"
         }
       ]
     },
@@ -227,7 +231,7 @@
       "id": "wizard-alchemy",
       "name": "Wizard Alchemy",
       "status": "active",
-      "desc": "Git 提交规范与审计日志已由 Kael 真实提交；本轮 Orion 调研输出/新 task 仍需补做，Kael 页面开发暂待新调研交付",
+      "desc": "Orion 2026-05-30 Druid Event 与 8-code 调研已真实提交；Kael 已接手 P0 页面更新开发",
       "members": [
         "creamy",
         "orion",
@@ -235,7 +239,7 @@
       ],
       "tasks": {
         "total": 4,
-        "done": 1
+        "done": 2
       },
       "taskList": [
         {
