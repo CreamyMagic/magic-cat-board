@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-30T10:50:00+08:00",
+  "updated": "2026-05-30T10:55:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -231,7 +231,7 @@
       "id": "wizard-alchemy",
       "name": "Wizard Alchemy",
       "status": "active",
-      "desc": "2026-05-30 本轮完成：Orion 调研、Kael P0 Druid Event/8-code 页面更新、pnpm build 验证、项目代码已推送",
+      "desc": "2026-05-30 本轮完成：Druid Event/8-code 页面更新已落地，task queue 与 GAME_NAV_INDEX 已按 rulebook 打 ✅ 并推送",
       "members": [
         "creamy",
         "orion",
