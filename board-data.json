@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-30T09:31:00+08:00",
+  "updated": "2026-05-30T09:40:00+08:00",
   "agents": [
     {
       "id": "creamy",
@@ -73,7 +73,7 @@
         },
         {
           "title": "wizard-alchemy 本轮页面更新开发（待 Orion 交付后启动）",
-          "status": "in_progress"
+          "status": "done"
         }
       ]
     },
@@ -219,7 +219,7 @@
       "id": "wizard-alchemy",
       "name": "Wizard Alchemy",
       "status": "active",
-      "desc": "已完成前期调研与前期开发上线，进入持续调研更新 → 页面落地循环",
+      "desc": "本轮调研与页面更新完成，已修复 pnpm 11 构建依赖审批并推送远端，进入下一轮持续更新待命",
       "members": [
         "creamy",
         "orion",
@@ -227,7 +227,7 @@
       ],
       "tasks": {
         "total": 3,
-        "done": 1
+        "done": 2
       },
       "taskList": [
         {
